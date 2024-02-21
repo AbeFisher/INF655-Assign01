@@ -1,38 +1,158 @@
 .App {
   text-align: center;
+  line-height: 20px;
+}
+.App h2, h3 {
+  line-height: 8px;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.pageHeader {
+  margin-bottom: 50px;
+  border: 1px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.task button {
+  float:right;
+  vertical-align: middle;
+  background-color: white;
+  color: red;
+  width: 60px;
+  height: 30px;
+  text-align: center;
+  font-size: 16px;
+  border-radius: 20%;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.task button:hover {
+  background-color: red;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.task span {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left:  5px;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  font-size: 1.25rem;
+  font-weight: bold;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.task input {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  margin-bottom: 5px;
+  width: 25px;
+  height: 25px;
+}
+.task label {
+  display: inline-block;
+  font-weight: bold;
+  font-size: 20px;
+  margin-left: 10px;
+  margin-bottom: 5px;
+}
+
+ .complete {
+    vertical-align: middle;
+    text-decoration: line-through;
+    color: gray;
+ }
+
+.cardContainer {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: 25px;
+  margin-right: 25px;
+}
+
+.card {
+  background-color: lightgray;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  margin-right: 25px;
+  margin-bottom: 20px;
+  width: 350px;
+  height: 330px;
+  text-align: left;
+  float:left;
+}
+
+.taskCard {
+  background-color: lightyellow;
+  border: 1px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  width: 40%;
+  min-width: 350px;
+  height: fit-content;
+  min-height: 330px;
+  text-align: left;
+  float:right;
+}
+
+.card-title {
+  font-size: 1.5rem;
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+
+.card-description {
+  font-size: 16px;
+  color: black;
+  margin-right: 20px;
+}
+
+input, label {
+  display: block;
+}
+
+label {
+  float: left;
+}
+
+.input-box {
+  width: 100%;
+  height: 30px;
+  font-size: 20px;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+input[type=submit] {
+  background-color: lightyellow;
+  font-size: 20px;
+  height: 30px;
+  width: auto;
+  margin-left: auto;
+  margin-right: 15px;
+  margin-bottom: 50px;
+  border-radius: 5px;
+}
+
+.rbPanel {
+  display: block;
+  padding: 10px;
+  text-align: left;
+  width: 300px;
+  height: 10px;
+}
+
+input[type=radio] {
+  display:inline;
+  margin-left: 30px;
+  margin-right: 15px;
+  margin-bottom: 10px;
+  float:left;
+  transform: scale(1.5);
+}
+
+.rbLabel {
+  display:inline;
+  font-size: 1.0rem;
+  font-weight: bold;
+  width: 200px;
 }
