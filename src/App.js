@@ -7,8 +7,10 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [savedTasks, setSavedTasks] = useState([]);
   const [descr, setDescr] = useState("");
+  const [newDescr, setNewDescr] = useState("");
+  const [idNum, setIdNum] = useState("");
 
-  const handleSubmit = (event) => {
+  const handleAddItem = (event) => {
     event.preventDefault();
     let nextID = GetNextID();
     
@@ -26,6 +28,20 @@ function App() {
     setDescr("");
   }
 
+  const handleUpdateItem = (event) => {
+    event.preventDefault();
+    
+    const id = idNum;
+    const newList = [...tasks];
+    newList[id].description = newDescr;
+    setTasks(newList);                
+
+    setNewDescr("");
+    setIdNum("");
+  }
+
+
+
   return (
     <div className="App">
 
@@ -38,7 +54,7 @@ function App() {
       <div className="cardContainer">
 
         <div className = "card">
-          <form  onSubmit={handleSubmit}>
+          <form  onSubmit={handleAddItem}>
             <h2 className="card-title">Add New To Do List Item</h2>
             <h3 className = "card-description">Description:
               <input 
@@ -50,7 +66,32 @@ function App() {
             </h3>
             <input type="Submit" value="Add Item" disabled={descr.length==0}/>
           </form>
-          
+
+          <form  onSubmit={handleUpdateItem}>
+            <h2 className="card-title">Update Task Item</h2>
+            <h3 className = "card-description">Description:
+              <input 
+                className="input-box"
+                type="text" 
+                value={newDescr}
+                onChange={(e) => setNewDescr(e.target.value)}
+                disabled={tasks.length == 0}
+              />
+            </h3>
+            <div className="item-id-panel">
+              <h3 className="nbr-box-label">Item ID:</h3>
+              <input 
+                  className="nbr-input-box"
+                  type="text" 
+                  value={idNum}
+                  onChange={(e) => setIdNum(e.target.value)}
+                  disabled={tasks.length == 0}
+                />
+              <input type="Submit" id="updateBtn" value="Update" disabled={!UpdateFormValid(newDescr, idNum, tasks.length)}/>
+            </div>
+          </form>
+
+
           <Filter tasks={tasks}
                 FilterTasks = {(event) => {
                   const cmp = document.getElementById("C");
@@ -111,6 +152,14 @@ function App() {
           }
       )
       return ID+1;
+  }
+
+  function UpdateFormValid(newDescr, idNum, count) {
+    if (newDescr.length == 0) return false;
+    if (idNum.length == 0) return false;
+    if (!Number.isInteger(parseInt(idNum))) return false;
+    if (idNum <0 || idNum >count) return false;
+    return true;
   }
   
 }

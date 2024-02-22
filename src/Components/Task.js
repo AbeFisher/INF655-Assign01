@@ -4,9 +4,9 @@ function Task({id, description, isComplete, MarkComplete, DeleteTask}) {
 
     return (
         <div className="task">
+            <button id={id} onClick={DeleteTask}>Delete</button>
             <Item id={id} isComplete={isComplete} MarkComplete={MarkComplete}/>
             <Desc isComplete={isComplete} description={description}/>
-            <button id={id} onClick={DeleteTask}>Delete</button>
         </div>
     )
 }

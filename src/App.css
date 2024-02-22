@@ -12,12 +12,13 @@
 }
 
 .task button {
-  float:right;
+  /* float:right; */
   vertical-align: middle;
   background-color: white;
   color: red;
   width: 60px;
   height: 30px;
+  margin-right: 10px;
   text-align: center;
   font-size: 16px;
   border-radius: 20%;
@@ -75,7 +76,7 @@
   margin-right: 25px;
   margin-bottom: 20px;
   width: 350px;
-  height: 330px;
+  height: fit-content;
   text-align: left;
   float:left;
 }
@@ -88,7 +89,7 @@
   width: 40%;
   min-width: 350px;
   height: fit-content;
-  min-height: 330px;
+  min-height: 560px;
   text-align: left;
   float:right;
 }
@@ -122,15 +123,45 @@ label {
   margin-bottom: 10px;
 }
 
+.nbr-input-box {
+  display:inline;
+  width: 70px;
+  height: 30px;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.item-id-panel {
+  display:block;
+  text-align: left;
+  width: auto;
+  margin-left: 0;
+  margin-right: 10px;
+  height: 80px;
+}
+
+.nbr-box-label {
+  display: inline;
+  font-size: 16px;
+  color: black;
+  margin-right: 10px;
+}
+
 input[type=submit] {
   background-color: lightyellow;
   font-size: 20px;
-  height: 30px;
+  height: 40px;
   width: auto;
   margin-left: auto;
   margin-right: 15px;
   margin-bottom: 50px;
-  border-radius: 5px;
+  border-radius: 10px;
+}
+
+#updateBtn {
+  display:inline;
+  float: right;
+  margin: 0;
 }
 
 .rbPanel {
