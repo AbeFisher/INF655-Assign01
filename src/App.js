@@ -1,14 +1,30 @@
 import './App.css';
 import TaskList from './components/TaskList';
 import Filter from './components/Filter';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 
 function App() {
-  const [tasks, setTasks] = useState([]);
+  const [tasks, setTasks] = useState(loadTaskData());
   const [savedTasks, setSavedTasks] = useState([]);
   const [descr, setDescr] = useState("");
   const [newDescr, setNewDescr] = useState("");
   const [idNum, setIdNum] = useState("");
+
+  //  Load stored task data, if any
+  function loadTaskData() {
+    const tasksJSON = localStorage.getItem('taskData');
+    return tasksJSON !==null ? JSON.parse(tasksJSON) : [];
+  }
+
+  const dateJSON = localStorage.getItem('dateStamp');
+  const dateStamp = dateJSON !== null ? `Last Updated: ${JSON.parse(dateJSON)}` : '';
+
+  //  Save task data to local storage
+  useEffect(() => {
+    const newDate = new Date().toLocaleDateString();
+    localStorage.setItem('taskData', JSON.stringify(tasks));
+    localStorage.setItem('dateStamp', JSON.stringify(newDate));
+  }, [tasks]);
 
   const handleAddItem = (event) => {
     event.preventDefault();
@@ -24,7 +40,6 @@ function App() {
         ]
       );  
     }
-
     setDescr("");
   }
 
@@ -48,7 +63,7 @@ function App() {
       <div className = "pageHeader">
         <h1>Abe Fisher's To Do List</h1>
         <h2>Version 1.0.0</h2>
-        <h3>Last Updated {new Date().toLocaleDateString()}</h3>
+        <h3>{dateStamp}</h3>
       </div>
 
       <div className="cardContainer">
