@@ -2,13 +2,15 @@ import './App.css';
 import TaskList from './components/TaskList';
 import Filter from './components/Filter';
 import {useState, useEffect} from 'react';
+import { v4 as uuidv4 } from "uuid";
 
 function App() {
   const [tasks, setTasks] = useState(loadTaskData());
   const [savedTasks, setSavedTasks] = useState([]);
   const [descr, setDescr] = useState("");
-  const [newDescr, setNewDescr] = useState("");
-  const [idNum, setIdNum] = useState("");
+  const [searchStr, setSearchStr] = useState("");
+  const [stDescr, setSTDescr] = useState("");
+  const [subTasks, setSubTasks] = useState([]);
 
   //  Load stored task data, if any
   function loadTaskData() {
@@ -28,12 +30,12 @@ function App() {
 
   const handleAddItem = (event) => {
     event.preventDefault();
-    let nextID = GetNextID();
+    let newID = uuidv4();
     
     if(descr.length > 0) {
       setTasks(
         [...tasks, 
-            { id: nextID, 
+            { id: newID, 
               description: descr,
               isComplete: false,
             }
@@ -43,26 +45,40 @@ function App() {
     setDescr("");
   }
 
-  const handleUpdateItem = (event) => {
+  const handleAddSubItem = (event) => {
     event.preventDefault();
-    
-    const id = idNum;
-    const newList = [...tasks];
-    newList[id].description = newDescr;
-    setTasks(newList);                
+    const results = tasks.filter((task)=>task.description === searchStr);
 
-    setNewDescr("");
-    setIdNum("");
+    if (results.length > 0 ) {
+      const taskID=results[0].id;
+      const newID = uuidv4();
+
+      if (stDescr.length > 0) {
+        setSubTasks(
+          [...subTasks, 
+              { taskID: taskID,
+                id: newID, 
+                description: stDescr,
+                isComplete: false,
+              }
+          ]
+        );  
+      }
+
+      //  decided not to clear the search string, because sometimes it's handy to leave it
+      //  if you want to add more than one sub-task to a task.
+      //      setSearchStr("");
+      setSTDescr("");  
+    }
+
   }
-
-
 
   return (
     <div className="App">
 
       <div className = "pageHeader">
         <h1>Abe Fisher's To Do List</h1>
-        <h2>Version 1.0.0</h2>
+        <h2>Version 2.0.0</h2>
         <h3>{dateStamp}</h3>
       </div>
 
@@ -82,32 +98,30 @@ function App() {
             <input type="Submit" value="Add Item" disabled={descr.length==0}/>
           </form>
 
-          <form  onSubmit={handleUpdateItem}>
-            <h2 className="card-title">Update Task Item</h2>
-            <h3 className = "card-description">Description:
+          <form  onSubmit={handleAddSubItem}>
+            <h2 className="card-title">Add Sub-Task</h2>
+            <h3 className = "card-description">Parent Item Name:
               <input 
                 className="input-box"
                 type="text" 
-                value={newDescr}
-                onChange={(e) => setNewDescr(e.target.value)}
+                value={searchStr}
+                onChange={(e) => setSearchStr(e.target.value)}
                 disabled={tasks.length == 0}
               />
             </h3>
-            <div className="item-id-panel">
-              <h3 className="nbr-box-label">Item ID:</h3>
-              <input 
-                  className="nbr-input-box"
-                  type="text" 
-                  value={idNum}
-                  onChange={(e) => setIdNum(e.target.value)}
-                  disabled={tasks.length == 0}
-                />
-              <input type="Submit" id="updateBtn" value="Update" disabled={!UpdateFormValid(newDescr, idNum, tasks.length)}/>
-            </div>
+            <h3 className="card-description">Sub Item Description:
+            <input 
+                className="input-box"
+                type="text" 
+                value={stDescr}
+                onChange={(e) => setSTDescr(e.target.value)}
+                disabled={tasks.length == 0}
+              />
+              </h3>
+            <input type="Submit" id="updateBtn" value="Add Sub-Item" disabled={!UpdateFormValid(searchStr, stDescr)}/>
           </form>
 
-
-          <Filter tasks={tasks}
+            <Filter tasks={tasks}
                 FilterTasks = {(event) => {
                   const cmp = document.getElementById("C");
                   const inc = document.getElementById("I");
@@ -136,21 +150,61 @@ function App() {
                   }
 
                 }} 
-          />
+            />
         </div>
 
-        <TaskList tasks = {tasks} 
+        <TaskList tasks = {tasks}
             MarkComplete = {(event) => {
-              const id = event.currentTarget.id-1;
-              const newList = [...tasks];
-              newList[id].isComplete = !newList[id].isComplete;
-              setTasks(newList);                
+              const id = event.currentTarget.id;
+              setTasks(tasks.map((task) =>
+                  task.id === id ? { ...task, isComplete: !task.isComplete } : task
+                ))          
             }}
+
             DeleteTask = {(event) => {
               const id = event.currentTarget.id;
               const newList = tasks.filter((task) => task.id != id);
               setTasks(newList);
             }} 
+
+            MarkSTComplete = {(event) => {
+              const id = event.currentTarget.id;
+
+              //  Get task ID from subtask id
+              const st = subTasks.filter((task)=>id === id);
+              const taskID = st.length > 0 ? st[0].taskID : null;
+
+              //  Update state of sub-task
+              setSubTasks(
+                subTasks.map((subTask) =>
+                  subTask.id === id ? { ...subTask, isComplete: !subTask.isComplete } : subTask
+                ))     
+
+              //  Then check to see if we need to update the completion status of the parent task
+              if (taskID !== null) {
+                const subs = subTasks.filter((subtask)=>subtask.taskID === taskID && !subtask.isComplete);
+                if (subs.length > 0) {
+                    //  there is at least one subtask that is still incomplete
+                    setTasks(tasks.map((task) =>
+                    task.id === taskID ? { ...task, isComplete: true } : task
+                  ))          
+                }
+                else {
+                  //  all sub-tasks are complete, so mark the task complete as well
+                  setTasks(tasks.map((task) =>
+                  task.id === taskID ? { ...task, isComplete: false } : task
+                  ))
+                }  
+              }  
+            }}
+
+            DeleteST = {(event) => {
+              const id = event.currentTarget.id;
+              const newList = subTasks.filter((subTask) => subTask.id != id);
+              setSubTasks(newList);
+            }} 
+
+            subTasks = {subTasks}
         />    
 
        </div>
@@ -169,11 +223,9 @@ function App() {
       return ID+1;
   }
 
-  function UpdateFormValid(newDescr, idNum, count) {
-    if (newDescr.length == 0) return false;
-    if (idNum.length == 0) return false;
-    if (!Number.isInteger(parseInt(idNum))) return false;
-    if (idNum <0 || idNum >count) return false;
+  function UpdateFormValid(searchStr, stDescr) {
+    if (searchStr.length == 0) return false;
+    if (stDescr.length == 0) return false;
     return true;
   }
   

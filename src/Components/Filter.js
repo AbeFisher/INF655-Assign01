@@ -6,9 +6,9 @@ import ReactDOM from 'react-dom/client';
 function Filter({tasks, FilterTasks}) {
     
     return (
-        <>
+        <div className="filter">
             <h2>Select Items to Display:</h2>
-            <div class="rbPanel">
+            <div className="rbPanel">
                 <input className="rbtn"
                     type="radio" 
                     id="A"
@@ -16,29 +16,29 @@ function Filter({tasks, FilterTasks}) {
                     onClick={FilterTasks}
                     defaultChecked
                 />
-                <label className="rbLabel" for="A">All Tasks</label>
+                <label className="rbLabel" htmlFor="A">All Tasks</label>
             </div>
 
-            <div class="rbPanel">
+            <div className="rbPanel">
                 <input className="rbtn"
                     type="radio" 
                     id="C"
                     name = "display" 
                     onClick={FilterTasks}
                 />
-                <label className="rbLabel" for="C">Completed Tasks</label>
+                <label className="rbLabel" htmlFor="C">Completed Tasks</label>
             </div>
 
-            <div class="rbPanel">    
+            <div className="rbPanel">    
                 <input className="rbtn"
                     type="radio" 
                     id="I"
                     name = "display" 
                     onClick={FilterTasks}
                 />
-                <label className="rbLabel" for="I">Incomplete Tasks</label>
+                <label className="rbLabel" htmlFor="I">Incomplete Tasks</label>
             </div>
-        </>
+        </div>
 
     );
 

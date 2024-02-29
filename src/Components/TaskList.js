@@ -1,9 +1,9 @@
 import React from "react";
 import Task from "./Task";
 
-function TaskList({tasks, MarkComplete, DeleteTask}) {
+function TaskList({tasks, MarkComplete, DeleteTask, MarkSTComplete, DeleteST, subTasks}) {
     return (
-        <div className="taskCard">
+        <div className="taskPanel">
         <h2 className="card-title">To Do Item List</h2>
             {tasks.map((task)=> (
                 <Task key={task.id} 
@@ -12,6 +12,9 @@ function TaskList({tasks, MarkComplete, DeleteTask}) {
                     isComplete={task.isComplete}
                     MarkComplete={MarkComplete} 
                     DeleteTask={DeleteTask}
+                    MarkSTComplete={MarkSTComplete}
+                    DeleteST={DeleteST}
+                    subTasks={subTasks}
                 />
             ))}
         </div>

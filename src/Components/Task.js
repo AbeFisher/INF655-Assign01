@@ -1,22 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaTrashAlt } from "react-icons/fa";
+import SubTaskList from "./SubTaskList";
 
-function Task({id, description, isComplete, MarkComplete, DeleteTask}) {
+function Task(
+    {   id, 
+        description, 
+        isComplete, 
+        MarkComplete, 
+        DeleteTask, 
+        MarkSTComplete, 
+        DeleteST,
+        subTasks,}
+    ) {
 
     return (
-        <div className="task">
-            <button id={id} onClick={DeleteTask}>Delete</button>
-            <Item id={id} isComplete={isComplete} MarkComplete={MarkComplete}/>
-            <Desc isComplete={isComplete} description={description}/>
+        <div className="task-card">
+            <div className="task">
+                <div className = "task-actions">
+                    <Item id={id} isComplete={isComplete} MarkComplete={MarkComplete}/>
+                    <button id={id} onClick={DeleteTask}><FaTrashAlt /></button>
+                </div>
+                <div className="task-descr">
+                    <Desc isComplete={isComplete} description={description}/>
+                </div>
+            </div>
+            <div className="sub-tasks">
+                <SubTaskList subTasks={subTasks.filter((subtask)=> subtask.taskID === id)}
+                             MarkSTComplete={MarkSTComplete}
+                             DeleteST={DeleteST}
+                />
+            </div>
         </div>
     )
 }
 
 function Desc({isComplete, description}) {
     if (isComplete) {
-        return ( <span className="complete">{description}</span> )
+        return ( <div className="complete">{description}</div> )
     }
     else {
-        return ( <span>{description}</span> )
+        return ( <div>{description}</div> )
     }
 }
 
@@ -27,7 +50,8 @@ function Item({id, isComplete, MarkComplete}) {
                    id={id} 
                    name = "complete" 
                    onClick={MarkComplete}
-                   checked />
+                   checked
+                   onChange={()=>{}} />
         )    
     }
     else {
